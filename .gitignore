@@ -1,0 +1,22 @@
+# Binaries
+arduino-manager
+arduino-manager.exe
+arduino-manager.app
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+*.test
+*.out
+
+# Fyne
+fyne-cross/

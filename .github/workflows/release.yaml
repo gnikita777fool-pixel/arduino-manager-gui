@@ -1,0 +1,109 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            goos: linux
+            goarch: amd64
+            artifact: arduino-manager-linux-amd64
+            ext: ""
+          - os: windows-latest
+            goos: windows
+            goarch: amd64
+            artifact: arduino-manager-windows-amd64
+            ext: ".exe"
+          - os: macos-latest
+            goos: darwin
+            goarch: universal
+            artifact: arduino-manager-macos-universal
+            ext: ".app"
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      # --- Системные зависимости для Fyne ---
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            gcc libgl1-mesa-dev xorg-dev \
+            libx11-dev libxcursor-dev libxrandr-dev \
+            libxinerama-dev libxi-dev libxxf86vm-dev
+
+      - name: Install macOS dependencies
+        if: runner.os == 'macOS'
+        run: |
+          # Xcode CLT уже есть на macos-latest
+          echo "macOS ready"
+
+      # --- Сборка ---
+      - name: Build (Linux / Windows)
+        if: runner.os != 'macOS'
+        env:
+          CGO_ENABLED: 1
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          go build -ldflags="-s -w" -o ${{ matrix.artifact }}${{ matrix.ext }} .
+
+      - name: Build (macOS universal)
+        if: runner.os == 'macOS'
+        run: |
+          fyne package -os darwin -icon icon.png -appID local.arduino.manager.gui || \
+          go build -ldflags="-s -w" -o ${{ matrix.artifact }} .
+
+      # --- Артефакты ---
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.artifact }}${{ matrix.ext }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: false
+
+      - name: Package archives
+        run: |
+          mkdir -p release
+          cd dist
+          for d in */; do
+            name="${d%/}"
+            (cd "$d" && zip -r "../../release/${name}.zip" .)
+          done
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*.zip
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
