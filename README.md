@@ -35,14 +35,12 @@
 - Настроена матрица сборок: Linux / Windows / macOS
 - Добавлена установка системных зависимостей Fyne
 
-<img width="1265" height="408" alt="image" src="https://github.com/user-attachments/assets/9b85f8ef-f220-48b6-8cf1-cd17fa530e43" />
-
 ### Этап 3. Публикация релиза
 - Создан тег `v1.3.0`
 - GitHub Actions собрал 3 бинарника
 - Артефакты опубликованы в GitHub Releases
 
-![Release](screenshots/05-release-page.png)
+<img width="1265" height="408" alt="image" src="https://github.com/user-attachments/assets/9b85f8ef-f220-48b6-8cf1-cd17fa530e43" />
 
 ## 📦 Установка
 
