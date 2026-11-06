@@ -35,7 +35,7 @@
 - Настроена матрица сборок: Linux / Windows / macOS
 - Добавлена установка системных зависимостей Fyne
 
-![Workflow](screenshots/04-actions-workflow.png)
+<img width="1265" height="408" alt="image" src="https://github.com/user-attachments/assets/9b85f8ef-f220-48b6-8cf1-cd17fa530e43" />
 
 ### Этап 3. Публикация релиза
 - Создан тег `v1.3.0`
