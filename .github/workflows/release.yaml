@@ -48,13 +48,12 @@ jobs:
           sudo apt-get install -y \
             gcc libgl1-mesa-dev xorg-dev \
             libx11-dev libxcursor-dev libxrandr-dev \
-            libxinerama-dev libxi-dev libxxf86vm-dev
+            libxinerama-dev libxi-dev libxxf86vm-dev \
+            libwayland-dev libxkbcommon-dev
 
       - name: Install macOS dependencies
         if: runner.os == 'macOS'
-        run: |
-          # Xcode CLT уже есть на macos-latest
-          echo "macOS ready"
+        run: echo "macOS ready"
 
       # --- Сборка ---
       - name: Build (Linux / Windows)
@@ -69,7 +68,6 @@ jobs:
       - name: Build (macOS universal)
         if: runner.os == 'macOS'
         run: |
-          fyne package -os darwin -icon icon.png -appID local.arduino.manager.gui || \
           go build -ldflags="-s -w" -o ${{ matrix.artifact }} .
 
       # --- Артефакты ---
