@@ -10,13 +10,10 @@
 ## 📸 Скриншоты приложения
 
 ### Главное окно
-![Главное окно](screenshots/01-main-window.png)
+<img width="1313" height="869" alt="image" src="https://github.com/user-attachments/assets/3f0b605b-7689-43d4-983e-c17c22e7252a" />
 
 ### Поиск библиотек
-![Поиск](screenshots/02-search.png)
-
-### Режим плат
-![Платы](screenshots/03-boards.png)
+<img width="1315" height="865" alt="image" src="https://github.com/user-attachments/assets/1b637c14-ee39-43f5-9f0b-3043e7dda88a" />
 
 ## 🚀 Возможности
 
@@ -41,7 +38,7 @@
 ![Workflow](screenshots/04-actions-workflow.png)
 
 ### Этап 3. Публикация релиза
-- Создан тег `v1.0.0`
+- Создан тег `v1.3.0`
 - GitHub Actions собрал 3 бинарника
 - Артефакты опубликованы в GitHub Releases
 
